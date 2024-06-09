@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "oculuss-support"
+name = "oculuss"
 version = "0.1.0"
 description = ""
 authors = ["Ivan Sakharov <vingving648@gmail.com>"]
@@ -13,10 +13,10 @@ python-dotenv = "^1.0.1"
 logtail-python = "^0.2.10"
 sqlalchemy = "^2.0.30"
 asyncpg = "^0.29.0"
+redis = "^5.0.5"
+
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-

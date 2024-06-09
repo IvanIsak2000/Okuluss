@@ -207,7 +207,7 @@ async def make_menu():
 
     builder.row(
         types.InlineKeyboardButton(
-            text='👤 Профиль',
+            text='👤 Лик',
             callback_data='profile')
     )
 
@@ -228,14 +228,14 @@ async def make_menu():
 
     builder.row(
         types.InlineKeyboardButton(
-            text='🪬 Учение',
+            text='🪬 Святилище',
             callback_data='knowledge'
         )
     )
 
     builder.row(
         types.InlineKeyboardButton(
-            text='📅 Расписание',
+            text='📅 Часовня',
             callback_data='timetable'
         ),
                 types.InlineKeyboardButton(

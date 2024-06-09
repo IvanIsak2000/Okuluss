@@ -46,8 +46,8 @@ async def knowledge_callback(callback: types.CallbackQuery, state: FSMContext):
         f'Доступность опроса: {await new_quiz_is_available(user_id=callback.from_user.id):} для пользователя {callback.from_user.id}')
     
     res = await new_quiz_is_available(user_id=callback.from_user.id)
-    # if res == True or res == None:
-    if 1:
+    if res == True or res == None:
+    # if 1:
         q = await select_random_poll()
         quiz_hash = await generate_quiz_hash()
         new_quiz = await callback.message.edit_text(
