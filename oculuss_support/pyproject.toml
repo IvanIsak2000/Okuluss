@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "oculuss-support"
+version = "0.1.0"
+description = ""
+authors = ["Ivan Sakharov <vingving648@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.12.3"
+aiogram = "^3.7.0"
+apscheduler = "^3.10.4"
+python-dotenv = "^1.0.1"
+logtail-python = "^0.2.10"
+sqlalchemy = "^2.0.30"
+asyncpg = "^0.29.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
