@@ -20,6 +20,8 @@ from kb.make_inline_keyboard import (
     quiz_answers
 )
 from utils.db.user import update_user_experience
+from utils.other.emoji import send_emoji
+from kb.make_inline_keyboard import make_to_menu_keyboard
 
 router = Router()
 
@@ -40,34 +42,33 @@ async def generate_quiz_hash() -> str:
     lambda d: d.data.startswith('knowledge:Вопрос'))
 async def knowledge_callback(callback: types.CallbackQuery, state: FSMContext):
     "Пока установлено через 24 часа, то есть новый вопрос можно получить только ровно через день"
-    await state.clear()
 
+    await send_emoji(
+        callback=callback,
+        emoji='❓'
+    )
+    await state.clear()
     await logger.info(
         f'Доступность опроса: {await new_quiz_is_available(user_id=callback.from_user.id):} для пользователя {callback.from_user.id}')
-    
-    res = await new_quiz_is_available(user_id=callback.from_user.id)
-    if res == True or res == None:
-    # if 1:
-        q = await select_random_poll()
-        quiz_hash = await generate_quiz_hash()
-        new_quiz = await callback.message.edit_text(
-            text=f'❓ Вопрос: {q["question"]}',
-            reply_markup=await quiz_answers(q['options'], quiz_hash=quiz_hash)
-        )
-        await logger.info(
-            f'new_quiz:{new_quiz}')
-            
-        await add_new_quiz(
-            quiz_hash=quiz_hash,
-            correct_id=int(q['correct_option']),
-            message=callback,
-            correct=None,
-            message_id=int(new_quiz.message_id)
-        )
-        await state.set_state(QuizStates.send_quiz)
-    else:
-        await callback.message.answer(
-            text='🧙‍♂️ Мудрец составляет вопрос, придите через день...')
+
+    q = await select_random_poll()
+    quiz_hash = await generate_quiz_hash()
+    new_quiz = await callback.message.edit_text(
+        text=f'❓ Вопрос: {q["question"]}',
+        reply_markup=await quiz_answers(q['options'], quiz_hash=quiz_hash)
+    )
+    await logger.info(
+        f'new_quiz:{new_quiz}')
+        
+    await add_new_quiz(
+        quiz_hash=quiz_hash,
+        correct_id=int(q['correct_option']),
+        message=callback,
+        correct=None,
+        message_id=int(new_quiz.message_id)
+    )
+    await state.set_state(QuizStates.send_quiz)
+
 
 
 @router.callback_query(
@@ -92,15 +93,20 @@ async def get_quiz_answer(
                 count=50
             
             )
-            await callback_query.message.edit_text(
-                text='💥 Верно\nДобавлено +50 опыта 🌀',
+            await callback_query.message.delete()
+            await send_emoji(
+                callback=callback_query,
+                emoji='💥',
+                to_delete=False
+            )
+            await callback_query.message.answer(
+                text='Браво!\nДобавлено +50 опыта 🌀',
                 reply_markup=types.InlineKeyboardMarkup(
                     inline_keyboard=[
                         [
                             types.InlineKeyboardButton(
-                                text='🔙 К меню',
+                                text='< Обратно',
                                 callback_data=f'menu')
-                            
                         ]
                     ]
                 )
@@ -109,17 +115,18 @@ async def get_quiz_answer(
                 quiz_hash=quiz_hash,
                 correct=True)
         else:
-            quotes = [
-                'Чему бы ты ни учился, ты учишься для себя.'
-            ]
-            quote = random.choice(quotes)
-            await callback_query.message.edit_text(
-                text=f'🟥 Не правильно, попробуй в следующий раз\n{html.quote(quote)}',
+            await send_emoji(
+                callback=callback_query,
+                emoji='👺',
+                to_delete=False
+            )
+            await callback_query.message.answer(
+                text=f'Не правильно, попробуй в следующий раз',
                 reply_markup=types.InlineKeyboardMarkup(
                     inline_keyboard=[
                         [
                             types.InlineKeyboardButton(
-                                text='🔙 К меню',
+                                text='< Обратно',
                                 callback_data=f'menu')
                             
                         ]

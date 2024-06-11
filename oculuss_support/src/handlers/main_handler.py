@@ -3,6 +3,10 @@ from aiogram import types
 from aiogram.filters import Command
 from aiogram.enums import ParseMode
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.filters import StateFilter
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import StatesGroup, State
+
 
 from utils.db.models import (
     add_know_user,
@@ -25,19 +29,27 @@ from utils.texts import (
     you_are_access_user,
     you_are_not_access_user
 )
+from utils.other.emoji import send_emoji
 
 router = Router()
 
 
-@router.message(Command('menu'))
-async def menu_handler(message: types.Message):
+class AllMessagesRemoveClass(StatesGroup):
+    ...
+
+@router.message(Command('start'))
+async def start_handler(message: types.Message):
     await add_know_user(message=message)
     # await add_new_access_user(message=message)
     if await is_access_user(message=message):
         user = await get_access_user_data(message.from_user.id)
-
+        await send_emoji(
+            message=message,
+            emoji='🏆',
+            to_delete=False
+        )
         await message.answer(
-            text=f'🏆 Ты уже с нами - @OkulussBot\n\nОкончание {user.end_time}'
+            text=f'Ты уже с нами - @OkulussBot\n\nОкончание {user.end_time}'
         )
     else:
         builder = InlineKeyboardBuilder()
@@ -52,6 +64,11 @@ async def menu_handler(message: types.Message):
                 text='Мне не интересно',
                 callback_data='no_interest'
             )
+        )
+        await send_emoji(
+            message=message,
+            emoji='👀',
+            to_delete=False
         )
         await message.answer(
             text='''
@@ -69,15 +86,20 @@ async def menu_handler(message: types.Message):
 🔔 Не успеваешь отслеживать заканчивающиеся добавки? 
 
 ''',    
-        reply_markup=builder.as_markup(),
-        parse_mode=ParseMode.MARKDOWN_V2)
+            reply_markup=builder.as_markup(),
+            parse_mode=ParseMode.MARKDOWN_V2
+        )
+
 
 @router.callback_query(
     F.data == 'no_interest'
 )
 async def no_interest_handler(callback: types.CallbackQuery):
+    await callback.message.answer_sticker(
+        sticker='CAACAgIAAxkBAAEMSYpmaD_b1TtLpkozk0EFv3r48esaIQACxgADq1fEC-hqQIQONXuONQQ'
+    )
     await callback.message.answer(
-        text='💢 Нахуя тогда ты пришёл сюда?\nПроваливай, обойдёмся без тебя'
+        text='Нахуя тогда ты пришёл сюда?\nПроваливай, обойдёмся без тебя'
     )
 
 
@@ -110,6 +132,11 @@ async def to_access_handler(callback: types.CallbackQuery):
             callback_data='to_price'
         )
     )
+    await send_emoji(
+        callback=callback,
+        emoji='💎',
+        to_delete=False
+    )
     await callback.message.answer(
         text=access_info_step_1,
         reply_markup=builder.as_markup(),
@@ -128,7 +155,11 @@ async def get_second_access_info_step(callback: types.CallbackQuery):
             callback_data='choose_payment'
         )
     )
-
+    await send_emoji(
+        callback=callback,
+        emoji='🪙',
+        to_delete=False
+    )
     await callback.message.answer(
         text=access_info_step_2,
         reply_markup=builder.as_markup()

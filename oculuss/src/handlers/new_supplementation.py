@@ -39,7 +39,7 @@ from utils.texts import (
     step_2,
     step_3
 )
-from utils.exceptions import (
+from utils.other.exceptions import (
     SupplementationNameIsNotValid,
     SupplementaryDoseIsNotValid,
     SupplementationCountIsNotValid

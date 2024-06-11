@@ -28,6 +28,9 @@ async def make_supplementation_keyboard(
             builder.row(types.InlineKeyboardButton(
                 text=f'{name} {item.time} {item.dose} {"🟢" if item.is_active else "🔴"}',
                 callback_data=f"supplementation:{item.supplementation_hash}"))
+        builder.row(types.InlineKeyboardButton(
+            text='< Обратно',
+            callback_data=f'menu'))
         return builder.as_markup()
  
 
@@ -36,13 +39,14 @@ async def keyboard_for_accepting_supplements(record_hash: str):
 
     builder = InlineKeyboardBuilder()
 
-    builder.row(types.InlineKeyboardButton(
-        text='✅ Принял всё',
-        callback_data=f'record_of_accept:{record_hash}'))
-    
-    builder.row(types.InlineKeyboardButton(
-        text='➡️ Пропустить всё',
-        callback_data=f'record_of_pass:{record_hash}'))
+    builder.row(
+        types.InlineKeyboardButton(
+            text='✅ Принял всё',
+            callback_data=f'record_of_accept:{record_hash}'),
+        types.InlineKeyboardButton(
+            text='➡️ Пропустить всё',
+            callback_data=f'record_of_pass:{record_hash}')
+    )
     return builder.as_markup()
 
 

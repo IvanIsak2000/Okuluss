@@ -13,7 +13,7 @@ from utils.db.build_in_supplementation import (
     get_supplementation,
     get_info_from_supplementation_by_id
 )
-from kb.make_inline_wiki_keyboard import make_under_supplementation_keyboard
+from kb.make_inline_library_keyboard import make_under_supplementation_keyboard
 from utils.logging.logger import logger
 
 
@@ -21,9 +21,9 @@ router = Router()
 
 
 @router.inline_query(
-    F.query == 'wiki',
+    F.query == 'library',
     StateFilter(None))
-async def get_supplementation_as_wiki_list(
+async def get_supplementation_as_library_list(
         query: InlineQuery):
     """Получение inline запроса от пользователям"""
     supplementation_item = await get_supplementation(message=query)

@@ -21,7 +21,7 @@ async def make_inline_keyboard(items: list):
             callback_data=f'selected:{await remove_symbols(item)}')
         )
     builder.row(types.InlineKeyboardButton(
-        text='🔙 К меню',
+        text='< Обратно',
         callback_data=f'menu'))
     return builder.as_markup()
 
@@ -46,7 +46,7 @@ async def make_inline_keyboard_to_timetable(user_id: int):
             callback_data=f'selected:{item["callback"]}')
         )
     builder.row(types.InlineKeyboardButton(
-        text='🔙 К меню',
+        text='< Обратно',
         callback_data=f'menu'))
     return builder.as_markup()
 
@@ -81,7 +81,7 @@ async def make_inline_select_course_keyboard(
         text=course_title,
         callback_data=f'course_name:{course_name}'))
     builder.row(types.InlineKeyboardButton(
-        text='🔙 К меню',
+        text='< Обратно',
         callback_data=f'menu'))
     return builder.as_markup()
 
@@ -95,7 +95,7 @@ async def make_yes_no_keyboard():
             callback_data=f'confirm:{await remove_symbols(item)}')
         )
     builder.row(types.InlineKeyboardButton(
-        text='🔙 К меню',
+        text='< Обратно',
         callback_data=f'menu'))
     return builder.as_markup()
 
@@ -134,7 +134,7 @@ async def make_stacks_keyboard(stacks: list):
             callback_data=f'stack:{await remove_symbols(item)}')
         )
     builder.row(types.InlineKeyboardButton(
-        text='🔙 К меню',
+        text='< Обратно',
         callback_data=f'menu'))
     return builder.as_markup()
 
@@ -149,7 +149,7 @@ async def make_support_keyboard():
             callback_data=f'selected:{await remove_symbols(item)}')
         )
     builder.row(types.InlineKeyboardButton(
-        text='🔙 К меню',
+        text='< Обратно',
         callback_data=f'menu'))
     return builder.as_markup()
 
@@ -165,7 +165,7 @@ async def make_link_to_profile_article():
             text='Достижения',
             callback_data=f'selected:achievements'))
     builder.row(types.InlineKeyboardButton(
-        text='🔙 К меню',
+        text='< Обратно',
         callback_data=f'menu'))
     return builder.as_markup()
 
@@ -179,7 +179,7 @@ async def make_knowledge_keyboard():
             text=item,
             callback_data=f'knowledge:{await remove_symbols(item)}'))
     builder.row(types.InlineKeyboardButton(
-        text='🔙 К меню',
+        text='< Обратно',
         callback_data=f'menu'))
     return builder.as_markup()
 
@@ -196,57 +196,53 @@ async def quiz_answers(
             callback_data=f'quiz_answer:{index},quiz_hash:{quiz_hash}'))
         index += 1
     builder.row(types.InlineKeyboardButton(
-        text='🔙 К меню',
+        text='< Обратно',
         callback_data=f'menu'))
     return builder.as_markup()
 
-
 async def make_menu():
-
     builder = InlineKeyboardBuilder()
 
     builder.row(
         types.InlineKeyboardButton(
-            text='👤 Лик',
-            callback_data='profile')
+            text='🗞️ Начало истории',
+            callback_data='start'
+        )
     )
-
     builder.row(
         types.InlineKeyboardButton(
-            text='📚 Википедия',
-            callback_data='wiki'
+            text='📚 Библиотека',
+            callback_data='library'
         ),
-        # types.InlineKeyboardButton(
-        #     text='⚗️ Топ БАДов',
-        #     callback_data='top'
-        # ),
         types.InlineKeyboardButton(
-            text='📦 Стаки',
+            text='🧰 Стаки',
             callback_data='stacks'
         )
     )
-
     builder.row(
         types.InlineKeyboardButton(
-            text='🪬 Святилище',
+            text='⌛ Расписание',
+            callback_data='timetable'
+        ),
+        types.InlineKeyboardButton(
+            text='🏛️ Храм знаний',
             callback_data='knowledge'
         )
     )
 
     builder.row(
         types.InlineKeyboardButton(
-            text='📅 Часовня',
-            callback_data='timetable'
+            text='🛡️ Кланы',
+            callback_data='clans'
         ),
-                types.InlineKeyboardButton(
-            text='🎯 Задачи',
-            callback_data='tasks'   
+        types.InlineKeyboardButton(
+            text='🕹️ Ежедневные задачи',
+            callback_data='tasks' 
         )
     )
-
     builder.row(
         types.InlineKeyboardButton(
-            text='⛑️ Обратная связь',
+            text='🪖 Обратная связь',
             callback_data='feedback'
         )
     )
@@ -257,7 +253,7 @@ async def make_to_menu_keyboard():
     builder = InlineKeyboardBuilder()
     
     builder.row(types.InlineKeyboardButton(
-        text='🔙 К меню',
+        text='< Обратно',
         callback_data=f'menu')
     )
 

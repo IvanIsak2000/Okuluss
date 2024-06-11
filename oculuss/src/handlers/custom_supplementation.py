@@ -8,7 +8,7 @@ from utils.logging.logger import logger
 from kb.make_inline_keyboard import make_inline_keyboard_to_timetable
 from kb.supplementation_keyboard import (
     make_supplementation_keyboard,
-    keyboard_for_edit_supplementation
+    keyboard_for_edit_supplementation,
 )
 from utils.db.custom_supplementation import (
     get_user_custom_supplementation,
@@ -18,6 +18,9 @@ from utils.db.custom_supplementation import (
     turn_off_supplementation,
     turn_on_supplementation
 )
+from kb.make_inline_library_keyboard import make_inline_library_keyboard
+from kb.make_inline_keyboard import make_to_menu_keyboard
+from utils.other.emoji import send_emoji
 
 router = Router()
 
@@ -29,16 +32,27 @@ async def show_all_supp(
         callback: types.CallbackQuery):
 
     if await make_supplementation_keyboard(user_id=callback.from_user.id) == False:
+        await send_emoji(
+            callback=callback,
+            emoji='👀',
+            to_delete=False
+        )
         await callback.message.answer(
-            text='💊 Ваших добавок не обнаружено!'
+            text='Ваших добавок не обнаружено!',
+            reply_markup=await make_to_menu_keyboard()
         )        
        
     else:
-        await callback.message.edit_text(
+        await send_emoji(
+            callback=callback,
+            emoji='💊',
+        )
+        await callback.message.answer(
             text='''
-    💊 Список всех ваших добавок.
-    Для редактирования нажмите на неё:
-    ''',
+Весь список твоих кастомных добавок.
+
+Для редактирования нажимай на кнопку добавки:
+''',
             reply_markup=await make_supplementation_keyboard(
                 user_id=int(callback.from_user.id))
         )
@@ -87,13 +101,21 @@ async def remove_supplementation(callback: types.CallbackQuery):
     )
 
     if await make_supplementation_keyboard(user_id=callback.from_user.id) == False:
-        await callback.message.edit_text(
-            text='✅ Удалено!',
+        await send_emoji(
+            callback=callback,
+            to_delete=False
+        )
+        await callback.message.answer(
+            text='Удалено!',
             reply_markup= await make_inline_keyboard_to_timetable(user_id=callback.from_user.id)
         )
     else:
-        await callback.message.edit_text(
-            text='✅ Удалено!',
+        await send_emoji(
+            callback=callback,
+            to_delete=False
+        )
+        await callback.message.answer(
+            text='Удалено!',
             reply_markup= await make_supplementation_keyboard(
                 user_id=callback.from_user.id,
             )
@@ -108,7 +130,6 @@ async def turn_off(callback: types.CallbackQuery):
     """
 
     suppl_hash_to_turn_off = callback.data.split(':')[1]
-    await logger.info(f'suppl_hash_to_turn_off: {suppl_hash_to_turn_off}')
     await turn_off_supplementation(
         user_id=int(callback.from_user.id),
         supplementation_hash=suppl_hash_to_turn_off
@@ -128,7 +149,6 @@ async def turn_on(callback: types.CallbackQuery):
     """
 
     suppl_hash_to_turn_on = callback.data.split(':')[1]
-    await logger.info(f'suppl_hash_to_turn_on: {suppl_hash_to_turn_on}')
     await turn_on_supplementation(
         user_id=int(callback.from_user.id),
         supplementation_hash=suppl_hash_to_turn_on

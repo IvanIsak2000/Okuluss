@@ -14,19 +14,25 @@ from utils.db.models import *
 from utils.gamification.achievement.achievements import get_only_title_description
 from utils.db.user import *
 from utils.texts import MY_TIMEZONE
+from utils.other.emoji import send_emoji
 
 
 async def send_new_achievement_unblocked(
     bot: aiogram.Bot,
     user_id: int,
     achievement: str,
-    level_to: int):
+    level_to: int
+):
     """Отправить пользователю сообщение что новое достижение было открыто"""
-    
+
+    await send_emoji(
+        bot=bot,
+        emoji='🎉',
+        to_delete=False
+        )
     await bot.send_message(
         chat_id=user_id,
-        text=f'🎉 Открыто новое достижение: {achievement} {level_to}')   
-    await logger.info(f'Сообщение что открыто достижение {achievement} {level_to} для пользователя {user_id} отправлено ')
+        text=f'Открыто новое достижение: {achievement} {level_to}')   
 
 
 async def add_new_achievement_record_in_history(

@@ -31,6 +31,7 @@ from utils.db.models import (
     add_utilized_hash)
 from utils.access.check_hash import CheckHash
 from utils.logging.send_alert import send_alert
+from utils.other.emoji import send_emoji
 
 router = Router()
 
@@ -44,9 +45,7 @@ async def generate_hash() -> str:
     record_hash.update(str(random.randint(0, 10000)).encode('utf-8'))
     return record_hash.hexdigest() 
 
-
-            
-
+    
 @router.callback_query(
     F.data == 'choose_payment'
 )
@@ -108,8 +107,14 @@ async def get_user_text(message: types.Message, state: FSMContext):
     status = hash_was_checked['status']
     logger.info(f'status={status}')
     if status:
+        await send_emoji(
+            message=message,
+            emoji='🔐',
+            to_delete=False
+        )
+        
         await message.answer(
-            '⚜️ Транзакция проверена!\n Добро пожаловать в число избранных: @OkulussBot\nПроверить доступ:\n/access')
+            'Доступ открыт!\n\n Добро пожаловать в число избранных: @OkulussBot')
         await add_new_access_user(message=message)
         await add_utilized_hash(
             user_id=message.from_user.id,

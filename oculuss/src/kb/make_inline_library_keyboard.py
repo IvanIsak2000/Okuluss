@@ -13,9 +13,9 @@ async def remove_symbols(item: str):
 
 async def make_under_supplementation_keyboard(
     message = None,
-    callback = None):
+    callback = None
+):
     if message:
-        await logger.info(f'текст сообщения для кнопок {message.text}')
         reaction = ['👍', '👎']
 
         builder = InlineKeyboardBuilder()
@@ -27,15 +27,14 @@ async def make_under_supplementation_keyboard(
         builder.row(
             InlineKeyboardButton(
                 text='💊 Поиск по добавкам',
-                switch_inline_query_current_chat='wiki'))
+                switch_inline_query_current_chat='library'))
         builder.row(
             InlineKeyboardButton(
-                text='🔙 К меню',
+                text='< Обратно',
                 callback_data=f'menu')
         )
         return builder.as_markup()
     else:
-        await logger.info(f'текст сообщения для кнопок {callback.data}')
         reaction = ['👍', '👎']
 
         builder = InlineKeyboardBuilder()
@@ -47,35 +46,35 @@ async def make_under_supplementation_keyboard(
         builder.row(
             InlineKeyboardButton(
                 text='💊 Поиск по добавкам',
-                switch_inline_query_current_chat='wiki'))
+                switch_inline_query_current_chat='library'))
         builder.row(
             InlineKeyboardButton(
-                text='🔙 К меню',
+                text='< Обратно',
                 callback_data=f'menu')
         )
         return builder.as_markup()
 
 
-async def make_inline_wiki_keyboard():
+async def make_inline_library_keyboard():
     builder = InlineKeyboardBuilder()
 
     builder.row(
         types.InlineKeyboardButton(
             text='💊 Поиск по добавкам',
-            switch_inline_query_current_chat='wiki'
+            switch_inline_query_current_chat='library'
             )
     )
         
     builder.row(
         types.InlineKeyboardButton(
-            text='⚗️ Топ БАДов',
+            text='🔥 Топ БАДов',
             callback_data='top'
             )
     )
 
     builder.row(
         types.InlineKeyboardButton(
-            text='🔙 К меню',
+            text='< Обратно',
             callback_data=f'menu'
             )
     )

@@ -33,11 +33,7 @@ async def main(bot: Bot, dp: Dispatcher):
         
         commands = [
             types.BotCommand(
-                command="/menu", description="Меню"),
-            # types.BotCommand(
-            #     command="/access", description="Управление доступом"),
-            # types.BotCommand(  
-            #     command='/feedback', description='Обратная связь')
+                command="/start", description="Начало пути"),
         ]
         
         await bot.set_my_commands(commands=commands)

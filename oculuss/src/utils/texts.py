@@ -59,7 +59,7 @@ you_are_not_access_user = '''
 
 
 
-for_wiki = '''
+for_library = '''
 Википедия о наиболее полезных БАДах и рейтинг.
 '''
 

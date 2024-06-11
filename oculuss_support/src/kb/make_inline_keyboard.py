@@ -34,7 +34,7 @@ async def make_link_keyboard():
     """Построить клавиатуру на ссылку о том, как посмотреть хэш и в конце клава поддержки
     """
     
-    items = ['Оставить отзыв', 'Поддержка']
+    items = ['Поддержка']
     builder = InlineKeyboardBuilder()
     builder.row(types.InlineKeyboardButton(
         text='Как посмотреть хэш?',
@@ -49,7 +49,7 @@ async def make_link_keyboard():
 
 async def make_support_keyboard():
     """Создает клавиатуру поддержки"""
-    items = ['Оставить отзыв', 'Поддержка']
+    items = ['Поддержка']
     builder = InlineKeyboardBuilder()
     for item in items:
         builder.row(types.InlineKeyboardButton(

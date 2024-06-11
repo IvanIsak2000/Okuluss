@@ -17,5 +17,10 @@ class CheckAccessMiddleware(BaseMiddleware):
         if await is_access_user(user_id=event.from_user.id):
             return await handler(event, data)
         else:
-            if event.text in ['/start', '/feedback']:
-                return event.answer(text=you_are_not_access_user)
+            return await handler(event, data)
+            # if event.text in ['/start', '/feedback']:
+            #     event.answer_sticker(
+            #         sticker='CAACAgIAAxkBAAEMSYpmaD_b1TtLpkozk0EFv3r48esaIQACxgADq1fEC-hqQIQONXuONQQ'
+            #
+            #     )
+            #     return event.answer(text=you_are_not_access_user)

@@ -64,14 +64,17 @@ async def update_supplementation_rate(
 async def get_supplementation_rating() -> str:
     """Получение рейтинга добавок"""
     lst = []
+    limit = 10
+
     async with async_session() as session:
         query = select(Supplementation).order_by(
             Supplementation.likes.desc())
         for i in await session.execute(query):
+            limit += 1
             lst.append(
                 f'{i.Supplementation.title}\n👍 {i.Supplementation.likes} 👎 {i.Supplementation.dislikes}')
-        return '\n'.join(lst)
-        await logger.info(f'Получение рейтинга добавок. Результат: {lst}')
+            if limit == 10:
+                return '\n'.join(lst)
 
 
      

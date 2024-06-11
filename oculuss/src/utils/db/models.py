@@ -206,7 +206,7 @@ async def init_db():
         if "already exists" in str(e):
             await logger.info('✅ БД уже существуют')
         else:
-            logger.critical(f'Databases crashed: {e}')
+            await logger.critical(f'Databases crashed: {e}')
 
 
 async def time_after_month(_time):

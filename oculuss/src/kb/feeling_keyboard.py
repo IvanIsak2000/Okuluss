@@ -17,7 +17,7 @@ async def make_feeling_keyboard():
             callback_data=f'feeling_rate:{item}')
         )
     builder.row(types.InlineKeyboardButton(
-        text='🔙 К меню',
+        text='< Обратно',
         callback_data=f'menu'))
     return builder.as_markup()
 

@@ -36,7 +36,12 @@ async def make_under_stack_keyboard(
             text='📦 Заказать весь стак',
             url=await get_stack_link(title=stack_title)
         )
-    
+    )
+    builder.row(
+        types.InlineKeyboardButton(
+            text='< Обратно',
+            callback_data=f'menu'
+        )
     )
     return builder.as_markup()
 

@@ -1,6 +1,7 @@
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
 from typing import Callable, Dict, Any, Awaitable
+from aiogram.utils.chat_action import ChatActionSender
 
 from utils.db.user import is_banned_user
 from utils.logging.logger import logger
@@ -19,4 +20,9 @@ class MessageLoggingMiddleware(BaseMiddleware):
                 'username': event.from_user.username,
                 'first_name': event.from_user.first_name,
                 'last_name': event.from_user.last_name})
-        return await handler(event, data)
+        async with ChatActionSender(
+            bot=event.bot,
+            action='typing',
+            chat_id=event.from_user.id
+        ):
+            return await handler(event, data)

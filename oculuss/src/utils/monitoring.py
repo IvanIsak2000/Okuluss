@@ -102,7 +102,8 @@ class Sender():
             supplementation_hash=supplementation_hash
         )
         await self.bot.send_message(
-            text=f'❗Твоего БАДа {supplementation.name} хватит ещё на {int(supplementation.count / supplementation.dose)} порций, закупи заранее'
+            chat_id=target.user_id,
+            text=f'❗Твоего БАДа {supplementation.name} хватит ещё на {int(supplementation.count / supplementation.dose)} порций/ии, закупи заранее'
         )
 
     async def user_supplementation_is_end(
@@ -178,10 +179,9 @@ class Monitor():
                                 elif count < dose * 3:
                                     await sender.user_supplementation_is_low(
                                         target=self.target,
-                                        supplementation_hash=i.supplementation_hash
-                                    )
+                                        supplementation_hash=i.supplementation_hash)
+                                    prepare_supplementation.append(i)
                                 else:
-                                    await logger.info(f'добавление БАДа в список: {i} для {self.target.user_id}')
                                     prepare_supplementation.append(i)
 
                     if prepare_supplementation != []:

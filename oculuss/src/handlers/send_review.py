@@ -9,6 +9,7 @@ import asyncio
 from utils.texts import send_review
 from utils.db.review import add_review
 from utils.logging.logger import logger
+from utils.other.emoji import send_emoji
 
 
 router = Router()
@@ -25,6 +26,10 @@ class SendReview(StatesGroup):
 async def user_selected_send_review(
         callback: types.CallbackQuery,
         state: FSMContext):
+    await  send_emoji(
+        callback=callback,
+        emoji='📥'
+    )
     await callback.message.answer(
         text=send_review)
     await state.set_state(SendReview.send_is_selected)

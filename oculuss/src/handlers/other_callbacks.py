@@ -8,45 +8,21 @@ from aiogram.fsm.context import FSMContext
 from utils.logging.logger import logger
 from utils.db.settings import get_moderators
 from utils.db.achievements import get_my_achievements
+from utils.other.emoji import send_emoji
 
 
 router = Router()
 
-
-@router.callback_query(
-    StateFilter(None),
-    lambda d: d.data.startswith('selected:Поддержка'))
-async def support_func(callback: types.CallbackQuery):
-    await callback.message.answer(
-        text=f'Модераторы: \n{await get_moderators(message=callback)}',
-        reply_markup=types.InlineKeyboardMarkup(
-                    inline_keyboard=[
-                        [
-                            types.InlineKeyboardButton(
-                                text='🔙 К меню',
-                                callback_data='menu')
-                        ]
-                    ]
-                )
-            )
-
-
-# @router.callback_query(
-#     StateFilter(None),
-#     lambda d: d.data.startswith('selected:Готовые'))
-# async def completed_courses_func(
-#         callback: types.CallbackQuery):
-#     """Select completed courses"""
-#     await callback.message.answer(
-#         text=completed_courses_info,
-#         reply_markup=await make_courses_keyboard())
 
 
 @router.callback_query(
     lambda d: d.data.startswith('selected:achievements'))
 async def all_achievements(
         callback: types.CallbackQuery):
-    
+    await send_emoji(
+        callback=callback,
+        emoji='🏆'
+    )
     achievements_list = await get_my_achievements(user_id=callback.from_user.id)
     achievement_counts = {}
     for achievement in achievements_list:
@@ -67,7 +43,7 @@ async def all_achievements(
         reply_markup=types.InlineKeyboardMarkup(
                     inline_keyboard=[[
                             types.InlineKeyboardButton(
-                                text='🔙 К меню',
+                                text='< Обратно',
                                 callback_data='menu')]
                     ]
                 )
@@ -79,6 +55,9 @@ async def all_achievements(
 async def pass_callback(
         callback: types.CallbackQuery,
         state: FSMContext):
+    await send_emoji(
+        callback=callback,
+    )
     await state.clear()
     await callback.message.delete()
 
@@ -89,6 +68,10 @@ async def pass_message(
         message: types.Message,
         state: FSMContext,
         bot: aiogram.Bot):
+    await send_emoji(
+        message=message,
+
+    )
 
     await state.clear()
     await message.delete()
